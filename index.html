@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wordle</title>
     <style>
-        * {
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-        }
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
       body {
         height: 100vh;
         display: flex;
@@ -46,73 +46,84 @@
         justify-content: center;
         align-items: center;
         font-size: x-large;
+        border-radius: 5px;
       }
       .keyboard-wrapper {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         width: 30%;
-        grid-template-columns: repeat(1fr , 10);
+        grid-template-columns: repeat(1fr, 10);
         gap: 5px;
         justify-content: center;
-
       }
     </style>
   </head>
   <body>
     <h1>خمن الكلمة</h1>
     <p>لا تحتاج الكلمات الي لام التعريف</p>
-
-    <div class="wordle-wrapper">
-      <div class="word">
-        <div class="letter-input">ش</div>
-        <div class="letter-input">م</div>
-        <div class="letter-input">س</div>
-        <div class="letter-input">ي</div>
-        <div class="letter-input">ة</div>
-      </div>
-      <div class="word">
-        <div class="letter-input"></div>
-        <div class="letter-input"></div>
-        <div class="letter-input"></div>
-        <div class="letter-input"></div>
-        <div class="letter-input"></div>
-      </div>
-      <div class="word">
-        <div class="letter-input"></div>
-        <div class="letter-input"></div>
-        <div class="letter-input"></div>
-        <div class="letter-input"></div>
-        <div class="letter-input"></div>
-      </div>
-      <div class="word">
-        <div class="letter-input"></div>
-        <div class="letter-input"></div>
-        <div class="letter-input"></div>
-        <div class="letter-input"></div>
-        <div class="letter-input"></div>
-      </div>
-      <div class="word">
-        <div class="letter-input"></div>
-        <div class="letter-input"></div>
-        <div class="letter-input"></div>
-        <div class="letter-input"></div>
-        <div class="letter-input"></div>
-      </div>
-    </div>
-
-    <div class="keyboard-wrapper">
-       
-    </div>
+    <div class="wordle-wrapper"></div>
+    <div class="keyboard-wrapper"></div>
 
     <script>
+      setupWordle();
+      setupKeyboard();
+
+      // setup wordle grid
+      function setupWordle() {
+        let wordle = document.getElementsByClassName("wordle-wrapper")[0];
+        wordle.innerHTML += ``;
+
+        for (let i = 0; i < 6; i++) {
+          var element = `<div class="word">`;
+          for (let j = 0; j < 5; j++) {
+            element += `<div class="letter-input"></div>`;
+          }
+          element += `</div>`;
+          wordle.innerHTML += element;
+        }
+      }
+
+      // setup keyboard layout, keys and interaction
+      function setupKeyboard() {
         let keyboard = document.getElementsByClassName("keyboard-wrapper")[0];
 
-        const alphabets = ['ا','ب','ت','ث','ج','ح','خ','د','ذ','ر','ز','س','ص','ض','ط','ع','غ','ف','ق','ك','ل','م','ن','ه','و','ي'];
-        
-        for(let i = 0; i < alphabets.length ; i++) {
-            keyboard.innerHTML += ` <div class="letter-key">${alphabets[i]}</div>`;
+        const alphabets = [
+          "ا",
+          "ب",
+          "ت",
+          "ث",
+          "ج",
+          "ح",
+          "خ",
+          "د",
+          "ذ",
+          "ر",
+          "ز",
+          "س",
+          "ص",
+          "ض",
+          "ط",
+          "ع",
+          "غ",
+          "ف",
+          "ق",
+          "ك",
+          "ل",
+          "م",
+          "ن",
+          "ه",
+          "و",
+          "ي",
+        ];
+
+        for (let i = 0; i < alphabets.length; i++) {
+          keyboard.innerHTML += `<button class="letter-key" onclick="userPressed('${alphabets[i]}')">${alphabets[i]}</button>`;
         }
+      }
+      function userPressed(value) {
+        console.log(value);
+      }
     </script>
   </body>
 </html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wordle</title>
+    <style>
+      body {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: beige;
+      }
+      .wordle-wrapper {
+        display: flex;
+        flex-direction: column;
+      }
+      .word {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 10px;
+      }
+
+      .letter-input {
+        width: 60px;
+        height: 60px;
+        background-color: rgb(71, 67, 67, 0.5);
+        margin-left: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: xx-large;
+      }
+      .letter-key {
+        width: 50px;
+        height: 50px;
+        background-color: rgb(144, 80, 80);
+      }
+      .keyboard-wrapper {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 30%;
+        grid-template-columns: repeat(1fr , 10)
+
+      }
+    </style>
+  </head>
+  <body>له
+    <h1>خمن الكلمة</h1>
+    <p>لا تحتاج الكلمات الي لام التعريف</p>
+
+    <div class="wordle-wrapper">
+      <div class="word">
+        <div class="letter-input">ش</div>
+        <div class="letter-input">م</div>
+        <div class="letter-input">س</div>
+        <div class="letter-input">ي</div>
+        <div class="letter-input">ة</div>
+      </div>
+      <div class="word">
+        <div class="letter-input"></div>
+        <div class="letter-input"></div>
+        <div class="letter-input"></div>
+        <div class="letter-input"></div>
+        <div class="letter-input"></div>
+      </div>
+      <div class="word">
+        <div class="letter-input"></div>
+        <div class="letter-input"></div>
+        <div class="letter-input"></div>
+        <div class="letter-input"></div>
+        <div class="letter-input"></div>
+      </div>
+      <div class="word">
+        <div class="letter-input"></div>
+        <div class="letter-input"></div>
+        <div class="letter-input"></div>
+        <div class="letter-input"></div>
+        <div class="letter-input"></div>
+      </div>
+      <div class="word">
+        <div class="letter-input"></div>
+        <div class="letter-input"></div>
+        <div class="letter-input"></div>
+        <div class="letter-input"></div>
+        <div class="letter-input"></div>
+      </div>
+    </div>
+
+    <div class="keyboard-wrapper">
+       
+    </div>
+
+    <script>
+        let keyboard = document.getElementsByClassName("keyboard-wrapper")[0];
+
+        const alphabets = ['ا','ب','ت','ث','ج','ح','خ','د','ذ','ر','ز','س','ص','ض','ط','ع','غ','ف','ق','ك','ل','م','ن','ه','و','ي'];
+        
+        for(let i = 0; i < alphabets.length ; i++) {
+            keyboard.innerHTML += ` <div class="letter-key">${alphabets[i]}</div>`;
+        }
+    </script>
+  </body>
+</html>

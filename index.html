@@ -66,18 +66,32 @@
     <div class="keyboard-wrapper"></div>
 
     <script>
-      setupWordle();
+      const ROWS = 6;
+      const COLUMNS = 5;
+
+      let storage = [
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+      ];
+      let current_row = 0;
+      let current_column = 0;
+
+      render();
       setupKeyboard();
 
       // setup wordle grid
       function setupWordle() {
         let wordle = document.getElementsByClassName("wordle-wrapper")[0];
-        wordle.innerHTML += ``;
+        wordle.innerHTML = ``;
 
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < ROWS; i++) {
           var element = `<div class="word">`;
-          for (let j = 0; j < 5; j++) {
-            element += `<div class="letter-input"></div>`;
+          for (let j = 0; j < COLUMNS; j++) {
+            element += `<div class="letter-input">${storage[i][j]}</div>`;
           }
           element += `</div>`;
           wordle.innerHTML += element;
@@ -87,6 +101,7 @@
       // setup keyboard layout, keys and interaction
       function setupKeyboard() {
         let keyboard = document.getElementsByClassName("keyboard-wrapper")[0];
+        keyboard.innerHTML = ``;
 
         const alphabets = [
           "ا",
@@ -123,6 +138,20 @@
       }
       function userPressed(value) {
         console.log(value);
+        storage[current_row][current_column] = value;
+        current_column += 1;
+        if (current_column >= COLUMNS) {
+          current_column = 0;
+
+          if (current_row < ROWS) {
+            current_row += 1;
+          }
+        }
+        render();
+      }
+
+      function render() {
+        setupWordle();
       }
     </script>
   </body>

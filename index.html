@@ -41,6 +41,9 @@
       .neutral {
         background-color: rgb(71, 67, 67, 0.5);
       }
+      .wrong {
+        background-color: rgba(36, 34, 34, 0.5);
+      }
       .correct {
         background-color: rgb(28, 150, 28);
       }
@@ -49,8 +52,8 @@
       }
 
       .letter-key {
-        width: 50px;
-        height: 50px;
+        min-width: 50px;
+        min-height: 50px;
         background-color: rgb(144, 80, 80);
         display: flex;
         justify-content: center;
@@ -161,8 +164,11 @@
         for (let i = 0; i < alphabets.length; i++) {
           keyboard.innerHTML += `<button class="letter-key" onclick="userPressed('${alphabets[i]}')">${alphabets[i]}</button>`;
         }
+
+        keyboard.innerHTML += `<button class="letter-key" style="background-color: gray;" onclick="backspace()">مسح</button>`;
       }
 
+      // user selected one of the alphabets
       function userPressed(value) {
         storage[current_row][current_column] = value;
         current_column += 1;
@@ -178,7 +184,7 @@
         render();
       }
 
-      // check the word
+      // check the guessed word
       function checkTheGuessedWord() {
         var guess = ``;
         let previousRow = current_row;
@@ -195,18 +201,28 @@
             let index = answer.indexOf(guessed_letter);
             if (index != -1) {
               storage_attribute[previousRow][i] = "almost";
+            } else {
+              storage_attribute[previousRow][i] = "wrong";
             }
           }
 
           guess += storage[previousRow][i];
         }
-        if (guess != answer) {
-          alert(`'${guess}'` + ` هو ظن خاطئ  `);
-        } else {
+
+        if (guess == answer) {
           alert(`مبروك لقد ربحت`);
         }
       }
 
+      function backspace() {
+        if (current_column > 0) {
+          current_column = current_column - 1;
+          storage[current_row][current_column] = "";
+          render();
+        }
+      }
+
+      // re-render the view
       function render() {
         setupWordle();
       }

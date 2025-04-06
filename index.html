@@ -55,8 +55,8 @@
         gap: 5px;
         justify-content: center;
 
-        @media(min-width:900px) {
-            width: 35%;
+        @media (min-width: 900px) {
+          width: 35%;
         }
       }
     </style>
@@ -81,6 +81,8 @@
       ];
       let current_row = 0;
       let current_column = 0;
+
+      let answer = "جاموس";
 
       render();
       setupKeyboard();
@@ -145,11 +147,26 @@
         if (current_column >= COLUMNS) {
           current_column = 0;
 
+          setTimeout(checkTheGuessedWord, 100);
+
           if (current_row < ROWS) {
             current_row += 1;
           }
         }
         render();
+      }
+
+      // check the word
+      function checkTheGuessedWord() {
+        var guess = ``;
+        for (let i = 0; i < COLUMNS; i++) {
+          guess += storage[current_row][i];
+        }
+        if (guess != answer) {
+          alert(`'${guess}'` + ` هو ظن خاطئ  `);
+        } else {
+          alert(`مبروك لقد ربحت`);
+        }
       }
 
       function render() {

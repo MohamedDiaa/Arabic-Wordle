@@ -15,7 +15,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        background-color: rgb(178, 178, 125);
+        background-color: rgb(192, 248, 255);
       }
       .wordle-wrapper {
         display: flex;
@@ -30,13 +30,24 @@
       .letter-input {
         width: 60px;
         height: 60px;
-        background-color: rgb(71, 67, 67, 0.5);
         margin-left: 5px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: xx-large;
+        color: black;
       }
+
+      .neutral {
+        background-color: rgb(71, 67, 67, 0.5);
+      }
+      .correct {
+        background-color: rgb(28, 150, 28);
+      }
+      .almost {
+        background-color: rgb(183, 183, 50);
+      }
+
       .letter-key {
         width: 50px;
         height: 50px;
@@ -46,6 +57,7 @@
         align-items: center;
         font-size: x-large;
         border-radius: 5px;
+        color: black;
       }
       .keyboard-wrapper {
         display: flex;
@@ -79,6 +91,16 @@
         ["", "", "", "", ""],
         ["", "", "", "", ""],
       ];
+
+      let storage_attribute = [
+        ["neutral", "neutral", "neutral", "neutral", "neutral"],
+        ["neutral", "neutral", "neutral", "neutral", "neutral"],
+        ["neutral", "neutral", "neutral", "neutral", "neutral"],
+        ["neutral", "neutral", "neutral", "neutral", "neutral"],
+        ["neutral", "neutral", "neutral", "neutral", "neutral"],
+        ["neutral", "neutral", "neutral", "neutral", "neutral"],
+      ];
+
       let current_row = 0;
       let current_column = 0;
 
@@ -95,7 +117,7 @@
         for (let i = 0; i < ROWS; i++) {
           var element = `<div class="word">`;
           for (let j = 0; j < COLUMNS; j++) {
-            element += `<div class="letter-input">${storage[i][j]}</div>`;
+            element += `<div class="letter-input ${storage_attribute[i][j]}">${storage[i][j]}</div>`;
           }
           element += `</div>`;
           wordle.innerHTML += element;
@@ -140,18 +162,18 @@
           keyboard.innerHTML += `<button class="letter-key" onclick="userPressed('${alphabets[i]}')">${alphabets[i]}</button>`;
         }
       }
+
       function userPressed(value) {
-        console.log(value);
         storage[current_row][current_column] = value;
         current_column += 1;
         if (current_column >= COLUMNS) {
           current_column = 0;
 
-          setTimeout(checkTheGuessedWord, 100);
-
           if (current_row < ROWS) {
             current_row += 1;
           }
+
+          checkTheGuessedWord();
         }
         render();
       }
@@ -159,8 +181,24 @@
       // check the word
       function checkTheGuessedWord() {
         var guess = ``;
+        let previousRow = current_row;
+        if (current_column == 0) {
+          previousRow = current_row - 1;
+        }
+
         for (let i = 0; i < COLUMNS; i++) {
-          guess += storage[current_row][i];
+          let guessed_letter = storage[previousRow][i];
+          let answer_letter = answer[i];
+          if (guessed_letter == answer_letter) {
+            storage_attribute[previousRow][i] = "correct";
+          } else {
+            let index = answer.indexOf(guessed_letter);
+            if (index != -1) {
+              storage_attribute[previousRow][i] = "almost";
+            }
+          }
+
+          guess += storage[previousRow][i];
         }
         if (guess != answer) {
           alert(`'${guess}'` + ` هو ظن خاطئ  `);

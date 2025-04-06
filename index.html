@@ -54,7 +54,6 @@
       .letter-key {
         min-width: 50px;
         min-height: 50px;
-        background-color: rgb(144, 80, 80);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -62,6 +61,10 @@
         border-radius: 5px;
         color: black;
       }
+      .unused {
+        background-color: rgb(144, 80, 80);
+      }
+
       .keyboard-wrapper {
         display: flex;
         flex-direction: row;
@@ -109,8 +112,9 @@
 
       let answer = "جاموس";
 
+      let keysSelected_Set = new Set();
+
       render();
-      setupKeyboard();
 
       // setup wordle grid
       function setupWordle() {
@@ -158,14 +162,25 @@
           "ن",
           "ه",
           "و",
+          "ؤ",
           "ي",
+          "ئ",
+          "إ",
+          "أ",
+          "آ",
+          "ء",
         ];
 
         for (let i = 0; i < alphabets.length; i++) {
-          keyboard.innerHTML += `<button class="letter-key" onclick="userPressed('${alphabets[i]}')">${alphabets[i]}</button>`;
+          const key_state = keysSelected_Set.has(alphabets[i])
+            ? answer.indexOf(alphabets[i]) != -1
+              ? "correct"
+              : "wrong"
+            : "unused";
+          keyboard.innerHTML += `<button class="letter-key ${key_state}" onclick="userPressed('${alphabets[i]}')">${alphabets[i]}</button>`;
         }
 
-        keyboard.innerHTML += `<button class="letter-key" style="background-color: gray;" onclick="backspace()">مسح</button>`;
+        keyboard.innerHTML += `<button class="letter-key unused" style="background-color: gray;" onclick="backspace()">مسح</button>`;
       }
 
       // user selected one of the alphabets
@@ -195,6 +210,9 @@
         for (let i = 0; i < COLUMNS; i++) {
           let guessed_letter = storage[previousRow][i];
           let answer_letter = answer[i];
+
+          keysSelected_Set.add(guessed_letter);
+
           if (guessed_letter == answer_letter) {
             storage_attribute[previousRow][i] = "correct";
           } else {
@@ -225,6 +243,7 @@
       // re-render the view
       function render() {
         setupWordle();
+        setupKeyboard();
       }
     </script>
   </body>

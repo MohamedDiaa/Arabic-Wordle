@@ -114,12 +114,14 @@
 
       let keysSelected_Set = new Set();
 
+      const wordleWrapper = document.querySelector(".wordle-wrapper");
+      const keyboardWrapper = document.querySelector(".keyboard-wrapper");
+
       render();
 
       // setup wordle grid
       function setupWordle() {
-        let wordle = document.getElementsByClassName("wordle-wrapper")[0];
-        wordle.innerHTML = ``;
+        wordleWrapper.innerHTML = ``;
 
         for (let i = 0; i < ROWS; i++) {
           var element = `<div class="word">`;
@@ -127,14 +129,13 @@
             element += `<div class="letter-input ${storage_attribute[i][j]}">${storage[i][j]}</div>`;
           }
           element += `</div>`;
-          wordle.innerHTML += element;
+          wordleWrapper.innerHTML += element;
         }
       }
 
       // setup keyboard layout, keys and interaction
       function setupKeyboard() {
-        let keyboard = document.getElementsByClassName("keyboard-wrapper")[0];
-        keyboard.innerHTML = ``;
+        keyboardWrapper.innerHTML = ``;
 
         const alphabets = [
           "ا",
@@ -161,6 +162,7 @@
           "م",
           "ن",
           "ه",
+          "ة",
           "و",
           "ؤ",
           "ي",
@@ -177,24 +179,21 @@
               ? "correct"
               : "wrong"
             : "unused";
-          keyboard.innerHTML += `<button class="letter-key ${key_state}" onclick="userPressed('${alphabets[i]}')">${alphabets[i]}</button>`;
+          keyboardWrapper.innerHTML += `<button class="letter-key ${key_state}" onclick="userPressed('${alphabets[i]}')">${alphabets[i]}</button>`;
         }
 
-        keyboard.innerHTML += `<button class="letter-key unused" style="background-color: gray;" onclick="backspace()">مسح</button>`;
+        keyboardWrapper.innerHTML += `<button class="letter-key unused" style="background-color: gray;" onclick="backspace()">مسح</button>`;
+        keyboardWrapper.innerHTML += `<button class="letter-key unused" style="background-color: gray;" onclick="submit()">أرسل</button>`;
       }
 
       // user selected one of the alphabets
       function userPressed(value) {
-        storage[current_row][current_column] = value;
-        current_column += 1;
-        if (current_column >= COLUMNS) {
-          current_column = 0;
+        if (current_column < COLUMNS) {
+          storage[current_row][current_column] = value;
 
-          if (current_row < ROWS) {
-            current_row += 1;
+          if (current_column + 1 < COLUMNS) {
+            current_column += 1;
           }
-
-          checkTheGuessedWord();
         }
         render();
       }
@@ -202,40 +201,50 @@
       // check the guessed word
       function checkTheGuessedWord() {
         var guess = ``;
-        let previousRow = current_row;
-        if (current_column == 0) {
-          previousRow = current_row - 1;
-        }
 
         for (let i = 0; i < COLUMNS; i++) {
-          let guessed_letter = storage[previousRow][i];
+          let guessed_letter = storage[current_row][i];
           let answer_letter = answer[i];
 
           keysSelected_Set.add(guessed_letter);
 
           if (guessed_letter == answer_letter) {
-            storage_attribute[previousRow][i] = "correct";
+            storage_attribute[current_row][i] = "correct";
           } else {
             let index = answer.indexOf(guessed_letter);
             if (index != -1) {
-              storage_attribute[previousRow][i] = "almost";
+              storage_attribute[current_row][i] = "almost";
             } else {
-              storage_attribute[previousRow][i] = "wrong";
+              storage_attribute[current_row][i] = "wrong";
             }
           }
 
-          guess += storage[previousRow][i];
+          guess += storage[current_row][i];
         }
 
+        render()
         if (guess == answer) {
           alert(`مبروك لقد ربحت`);
         }
       }
 
+      function submit() {
+        console.log("current column", current_column);
+        if (current_column == COLUMNS - 1) {
+          checkTheGuessedWord();
+
+          current_column = 0;
+
+          if (current_row < ROWS) {
+            current_row += 1;
+          }
+        }
+      }
+
       function backspace() {
-        if (current_column > 0) {
-          current_column = current_column - 1;
+        if (current_column >= 0) {
           storage[current_row][current_column] = "";
+          current_column = current_column - 1;
           render();
         }
       }

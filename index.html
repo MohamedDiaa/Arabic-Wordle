@@ -111,6 +111,7 @@
       let current_column = 0;
 
       let answer = "جاموس";
+      let gameFinished = false
 
       let keysSelected_Set = new Set();
 
@@ -188,6 +189,8 @@
 
       // user selected one of the alphabets
       function userPressed(value) {
+        if(gameFinished) { return; }
+        
         if (current_column < COLUMNS) {
           storage[current_row][current_column] = value;
 
@@ -200,31 +203,47 @@
 
       // check the guessed word
       function checkTheGuessedWord() {
-        var guess = ``;
+        const guessLetters = storage[current_row];
+        const answerLetters = answer.split("");
 
+        let guess = "";
+        let answerLetterCount = {};
+
+        // Count each letter in the answer
+        for (let ch of answerLetters) {
+          answerLetterCount[ch] = (answerLetterCount[ch] || 0) + 1;
+        }
+
+        // First pass - check correct letters
         for (let i = 0; i < COLUMNS; i++) {
-          let guessed_letter = storage[current_row][i];
-          let answer_letter = answer[i];
-
-          keysSelected_Set.add(guessed_letter);
-
-          if (guessed_letter == answer_letter) {
+          const guessed_letter = guessLetters[i];
+          if (guessed_letter === answerLetters[i]) {
             storage_attribute[current_row][i] = "correct";
-          } else {
-            let index = answer.indexOf(guessed_letter);
-            if (index != -1) {
+            answerLetterCount[guessed_letter] -= 1;
+          }
+        }
+
+        // Second pass - check for almost
+        for (let i = 0; i < COLUMNS; i++) {
+          const guessed_letter = guessLetters[i];
+          if (storage_attribute[current_row][i] !== "correct") {
+            if (answerLetterCount[guessed_letter] > 0) {
               storage_attribute[current_row][i] = "almost";
+              answerLetterCount[guessed_letter] -= 1;
             } else {
               storage_attribute[current_row][i] = "wrong";
             }
           }
 
-          guess += storage[current_row][i];
+          keysSelected_Set.add(guessed_letter);
+          guess += guessed_letter;
         }
 
-        render()
-        if (guess == answer) {
-          alert(`مبروك لقد ربحت`);
+        render();
+
+        if (guess === answer) {
+          alert(`مبروك لقد ربحت!`);
+          gameFinished = true;
         }
       }
 

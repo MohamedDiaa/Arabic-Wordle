@@ -111,7 +111,7 @@
       let current_column = 0;
 
       let answer = "جاموس";
-      let gameFinished = false
+      let gameFinished = false;
 
       let keysSelected_Set = new Set();
 
@@ -189,8 +189,10 @@
 
       // user selected one of the alphabets
       function userPressed(value) {
-        if(gameFinished) { return; }
-        
+        if (gameFinished) {
+          return;
+        }
+
         if (current_column < COLUMNS) {
           storage[current_row][current_column] = value;
 
@@ -248,8 +250,8 @@
       }
 
       function submit() {
-        console.log("current column", current_column);
-        if (current_column == COLUMNS - 1) {
+        const lastLetter = storage[current_row][current_column];
+        if (current_column == COLUMNS - 1 && lastLetter.length != 0) {
           checkTheGuessedWord();
 
           current_column = 0;
